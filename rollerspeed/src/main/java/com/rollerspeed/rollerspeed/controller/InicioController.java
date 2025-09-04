@@ -11,23 +11,23 @@ public class InicioController {
         return "layout";
     }
 
-    @GetMapping("/Misión")
-    public String Mision() {
-        return "Misión";
+    @GetMapping("/mision")
+    public String mision() {
+        return "mision";  // -> busca templates/mision.html
     }
 
-    @GetMapping("/Visión")
-    public String Vision() {
-        return "Visión";
+    @GetMapping("/vision")
+    public String vision() {
+        return "vision";  // -> templates/vision.html
     }
 
-    @GetMapping("/Servicios")
-    public String Servicios() {
-        return "Servicios";
+    @GetMapping("/servicios")
+    public String servicios() {
+        return "servicios"; // -> templates/servicios.html
     }
 
-    @GetMapping("/Eventos")
-    public String Eventos_de_la_escuela() {
-        return "Eventos de la escuela";
+    @GetMapping("/eventos")
+    public String eventos() {
+        return "eventos"; // -> templates/eventos.html
     }
 }
