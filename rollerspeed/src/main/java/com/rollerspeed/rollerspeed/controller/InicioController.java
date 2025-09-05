@@ -30,4 +30,9 @@ public class InicioController {
     public String eventos() {
         return "eventos"; // -> templates/eventos.html
     }
+
+    @GetMapping("/valores")
+public String valores() {
+    return "valores"; // -> templates/valores.html
+    }
 }
