@@ -4,6 +4,8 @@
         "rollerspeed",
         "speedroller",
         "springframework",
+        "thymeleaf",
         "userspeedroller"
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
