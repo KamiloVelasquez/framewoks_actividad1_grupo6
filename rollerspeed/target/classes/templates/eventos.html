@@ -6,15 +6,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Incluir la navbar del layout -->
+
     <div th:insert="layout :: navbar"></div>
     
-    <!-- Contenido de la página -->
-    <div class="container mt-4">
-        <h1>Eventos</h1>
-        <p>Descripción de los eventos de la escuela RollerSpeed.</p>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold">Eventos</h1>
+                    <div class="border-bottom border-primary w-25 mx-auto"></div>
+                </div>
+                <div class="bg-light p-4 rounded">
+                    <p class="fs-5 mb-3">
+                        <strong>Torneo Anual RollerSpeed:</strong> Competencia abierta a todas las categorías. ¡Ven y demuestra tu talento!
+                    </p>
+                    <p class="fs-5 mb-3">
+                        <strong>Noche de Patinaje Familiar:</strong> Todos los viernes, de 6pm a 9pm. Música, luces y diversión para toda la familia.
+                    </p>
+                    <p class="fs-5 mb-3">
+                        <strong>Clínica con Campeones:</strong> Talleres mensuales con patinadores profesionales invitados. ¡Aprende de los mejores!
+                    </p>
+                    <p class="fs-5 mb-3">
+                        <strong>Desfile Sobre Ruedas:</strong> Celebración comunitaria por el Día del Patinaje. Recorrido por el parque principal de la ciudad.
+                    </p>
+                    <p class="fs-5 mb-0">
+                        <strong>RollerSolidario:</strong> Jornadas de patinaje inclusivo con niños de fundaciones. ¡Únete y sé parte del cambio!
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

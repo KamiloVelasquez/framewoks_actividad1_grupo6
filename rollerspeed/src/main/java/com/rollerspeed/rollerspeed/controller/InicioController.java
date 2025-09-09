@@ -32,7 +32,19 @@ public class InicioController {
     }
 
     @GetMapping("/valores")
-public String valores() {
+    public String valores() {
     return "valores"; // -> templates/valores.html
     }
+
+    @GetMapping("/objetivos")
+    public String objetivos() {
+        return "objetivos"; // -> templates/objetivos.html
+    }
+
+    @GetMapping("/contacto")
+    public String contacto() {
+        return "contacto"; // -> templates/contacto.html
+    }
+
+    
 }

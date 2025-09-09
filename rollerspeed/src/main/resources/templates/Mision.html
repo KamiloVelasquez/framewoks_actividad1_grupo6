@@ -3,18 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Misión - RollerSpeed</title>
+    <!-- ✅ SIN ESPACIOS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
     <!-- Incluir la navbar del layout -->
     <div th:insert="layout :: navbar"></div>
     
     <!-- Contenido de la página -->
-    <div class="container mt-4">
-        <h1>Misión</h1>
-        <p>Descripción de la Misión de RollerSpeed.</p>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold">Misión</h1>
+                    <div class="border-bottom border-primary w-25 mx-auto"></div>
+                </div>
+                <div class="bg-light p-4 rounded">
+                    <p class="fs-5 mb-3">
+                        En <strong>RollerSpeed</strong>, nuestra misión es formar patinadores integrales a través de la enseñanza técnica, el desarrollo físico y la formación en valores, promoviendo un estilo de vida activo, saludable y lleno de pasión por el patinaje.
+                    </p>
+                    <p class="fs-5 mb-3">
+                        Guiamos a niños, jóvenes y adultos en su proceso de aprendizaje, potenciando sus habilidades, fomentando la disciplina, el trabajo en equipo y la superación personal, dentro de un entorno seguro, inclusivo y divertido.
+                    </p>
+                    <p class="fs-5 mb-0">
+                        Creemos que cada desliz, cada caída y cada victoria construyen no solo mejores patinadores, sino mejores personas.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+    <!-- ✅ SIN ESPACIOS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
