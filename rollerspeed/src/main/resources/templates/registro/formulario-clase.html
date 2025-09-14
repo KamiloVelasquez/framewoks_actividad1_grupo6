@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Programación de Clases - RollerSpeed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <div th:insert="layout :: navbar"></div>
+
+    <!-- Contenido principal -->
+    <main class="container my-5 flex-grow-1">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h3 class="card-title mb-0">
+                            <i class="bi bi-calendar-plus"></i> Programar Nueva Clase
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Mensajes de éxito/error -->
+                        <div th:if="${mensaje}" 
+                             th:class="${tipo == 'success' ? 'alert alert-success' : 'alert alert-danger'}" 
+                             class="alert alert-dismissible fade show">
+                            <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Formulario -->
+                        <form th:action="@{/registro/clases}" th:object="${clase}" method="post">
+                            
+                            <div class="row">
+                                <!-- Nombre de la clase -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="nombre" class="form-label">Nombre de la clase *</label>
+                                    <input type="text" th:field="*{nombre}" class="form-control" id="nombre" 
+                                           placeholder="Ej: Patinaje Básico Infantil" required>
+                                    <div th:if="${#fields.hasErrors('nombre')}" class="text-danger small">
+                                        <span th:errors="*{nombre}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Nivel -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nivel" class="form-label">Nivel *</label>
+                                    <select th:field="*{nivel}" class="form-select" id="nivel" required>
+                                        <option value="">Seleccione nivel...</option>
+                                        <option value="Principiante">Principiante</option>
+                                        <option value="Intermedio">Intermedio</option>
+                                        <option value="Avanzado">Avanzado</option>
+                                        <option value="Competitivo">Competitivo</option>
+                                        <option value="Infantil">Infantil</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('nivel')}" class="text-danger small">
+                                        <span th:errors="*{nivel}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Instructor -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="instructorId" class="form-label">Instructor asignado</label>
+                                    <select th:field="*{instructorId}" class="form-select" id="instructorId">
+                                        <option value="">Sin asignar</option>
+                                        <option th:each="instructor : ${instructores}" 
+                                                th:value="${instructor.id}" 
+                                                th:text="${instructor.nombre} + ' - ' + ${instructor.especialidad}"></option>
+                                    </select>
+                                    <div class="form-text">Puede asignarse posteriormente</div>
+                                </div>
+
+                                <!-- Fecha y hora -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="fechaHora" class="form-label">Fecha y hora *</label>
+                                    <input type="datetime-local" th:field="*{fechaHora}" class="form-control" id="fechaHora" required>
+                                    <div th:if="${#fields.hasErrors('fechaHora')}" class="text-danger small">
+                                        <span th:errors="*{fechaHora}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Duración -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="duracionMinutos" class="form-label">Duración (minutos) *</label>
+                                    <select th:field="*{duracionMinutos}" class="form-select" id="duracionMinutos" required>
+                                        <option value="">Seleccione duración...</option>
+                                        <option value="30">30 minutos</option>
+                                        <option value="45">45 minutos</option>
+                                        <option value="60">1 hora</option>
+                                        <option value="90">1 hora 30 minutos</option>
+                                        <option value="120">2 horas</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('duracionMinutos')}" class="text-danger small">
+                                        <span th:errors="*{duracionMinutos}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Capacidad máxima -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="capacidadMaxima" class="form-label">Capacidad máxima *</label>
+                                    <input type="number" th:field="*{capacidadMaxima}" class="form-control" id="capacidadMaxima" 
+                                           min="1" max="20" placeholder="Ej: 10" required>
+                                    <div class="form-text">Máximo 20 estudiantes por clase</div>
+                                    <div th:if="${#fields.hasErrors('capacidadMaxima')}" class="text-danger small">
+                                        <span th:errors="*{capacidadMaxima}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Descripción -->
+                                <div class="col-md-12 mb-4">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <textarea th:field="*{descripcion}" class="form-control" id="descripcion" rows="3" 
+                                              placeholder="Descripción opcional de la clase, objetivos, requisitos..."></textarea>
+                                    <div th:if="${#fields.hasErrors('descripcion')}" class="text-danger small">
+                                        <span th:errors="*{descripcion}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/}" class="btn btn-secondary me-md-2">Cancelar</a>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="bi bi-calendar-check"></i> Programar Clase
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

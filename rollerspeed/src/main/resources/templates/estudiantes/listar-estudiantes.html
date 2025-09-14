@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lista de Estudiantes - RollerSpeed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <div th:insert="layout :: navbar"></div>
+
+    <!-- Contenido principal -->
+    <main class="container my-5 flex-grow-1">
+        
+        <!-- Header con estadísticas -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="mb-3">
+                    <i class="bi bi-people"></i> Lista de Estudiantes
+                </h2>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h3 class="mb-1" th:text="${totalEstudiantes}">0</h3>
+                        <small>Estudiantes registrados</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensajes de éxito -->
+        <div th:if="${mensaje}" 
+             th:class="${tipo == 'success' ? 'alert alert-success' : 'alert alert-danger'}" 
+             class="alert alert-dismissible fade show">
+            <span th:text="${mensaje}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Botón para agregar nuevo estudiante -->
+        <div class="mb-4">
+            <a th:href="@{/registro/estudiante}" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> Inscribir Nuevo Estudiante
+            </a>
+        </div>
+
+        <!-- Tabla de estudiantes -->
+        <div class="card shadow">
+            <div class="card-body">
+                <div th:if="${estudiantes != null and !estudiantes.empty}" class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Edad</th>
+                                <th scope="col">Género</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Medio de Pago</th>
+                                <th scope="col">Fecha Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="estudiante : ${estudiantes}">
+                                <td th:text="${estudiante.id}"></td>
+                                <td>
+                                    <strong th:text="${estudiante.nombre}"></strong>
+                                </td>
+                                <td>
+                                    <!-- Calcular edad aproximada -->
+                                    <span th:text="${#temporals.format(estudiante.fechaNacimiento, 'yyyy-MM-dd')}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${estudiante.genero}" 
+                                          th:class="${estudiante.genero == 'Masculino' ? 'badge bg-primary' : 
+                                                    estudiante.genero == 'Femenino' ? 'badge bg-danger' : 'badge bg-secondary'}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="'mailto:' + ${estudiante.correo}" th:text="${estudiante.correo}"></a>
+                                </td>
+                                <td>
+                                    <a th:href="'tel:' + ${estudiante.telefono}" th:text="${estudiante.telefono}"></a>
+                                </td>
+                                <td>
+                                    <span th:text="${estudiante.medioPago}" class="badge bg-success"></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Recién registrado</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mensaje cuando no hay estudiantes -->
+                <div th:if="${estudiantes == null or estudiantes.empty}" class="text-center py-5">
+                    <i class="bi bi-people display-1 text-muted"></i>
+                    <h4 class="mt-3 text-muted">No hay estudiantes registrados</h4>
+                    <p class="text-muted">Comienza inscribiendo tu primer estudiante</p>
+                    <a th:href="@{/registro/estudiante}" class="btn btn-primary">
+                        <i class="bi bi-person-plus"></i> Inscribir Primer Estudiante
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

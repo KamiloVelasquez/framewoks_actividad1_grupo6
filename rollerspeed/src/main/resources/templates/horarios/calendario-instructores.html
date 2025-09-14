@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Horarios para Instructores - RollerSpeed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <div th:insert="layout :: navbar"></div>
+
+    <!-- Contenido principal -->
+    <main class="container my-5 flex-grow-1">
+        
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="mb-3">
+                    <i class="bi bi-calendar-check"></i> <span th:text="${titulo}">Horarios para Instructores</span>
+                </h2>
+                <p class="text-muted">Panel de control de horarios y clases asignadas para instructores</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a th:href="@{/registro/instructor}" class="btn btn-success">
+                    <i class="bi bi-person-badge"></i> Registrarse como Instructor
+                </a>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h4 th:text="${instructores != null ? instructores.size() : 0}">0</h4>
+                        <small>Instructores activos</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h4 th:text="${clases != null ? clases.size() : 0}">0</h4>
+                        <small>Clases programadas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body text-center">
+                        <!-- LÍNEA 54 CORREGIDA -->
+                        <h4>0</h4>
+                        <small>Clases sin instructor</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de instructores y sus horarios -->
+        <div th:if="${instructores != null and !instructores.empty}">
+            <h4 class="mb-3">Instructores y sus horarios</h4>
+            
+            <div class="accordion" id="accordionInstructores">
+                <div th:each="instructor, iterStat : ${instructores}" class="accordion-item">
+                    <h2 class="accordion-header" th:id="'heading' + ${instructor.id}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                th:data-bs-target="'#collapse' + ${instructor.id}" 
+                                th:aria-controls="'collapse' + ${instructor.id}">
+                            <div class="d-flex justify-content-between w-100 me-3">
+                                <div>
+                                    <strong th:text="${instructor.nombre}"></strong>
+                                    <small class="text-muted ms-2" th:text="${instructor.especialidad}"></small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-info" th:text="${instructor.experienciaAnos + ' años exp.'}"></span>
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+                    <div th:id="'collapse' + ${instructor.id}" 
+                         class="accordion-collapse collapse" 
+                         th:aria-labelledby="'heading' + ${instructor.id}">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <small class="text-muted">
+                                        <i class="bi bi-envelope"></i> <span th:text="${instructor.correo}"></span>
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">
+                                        <i class="bi bi-telephone"></i> <span th:text="${instructor.telefono}"></span>
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- LÍNEA 89 CORREGIDA - Simplificamos las clases asignadas -->
+                            <div>
+                                <h6>Clases asignadas:</h6>
+                                <div class="text-muted">
+                                    <small>Funcionalidad de asignación disponible próximamente</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LÍNEA 106 CORREGIDA - Clases sin instructor simplificado -->
+        <div th:if="${clases != null and !clases.empty}" class="mt-5">
+            <h4 class="mb-3 text-warning">
+                <i class="bi bi-exclamation-triangle"></i> Gestión de clases e instructores
+            </h4>
+            <p class="text-muted">Funcionalidad de asignación de instructores a clases disponible próximamente</p>
+        </div>
+
+        <!-- Mensaje cuando no hay datos -->
+        <div th:if="${(instructores == null or instructores.empty) and (clases == null or clases.empty)}" 
+             class="text-center py-5">
+            <i class="bi bi-calendar-x display-1 text-muted"></i>
+            <h4 class="mt-3 text-muted">Panel de instructores vacío</h4>
+            <p class="text-muted">Registra instructores y programa clases para comenzar</p>
+            <div class="mt-3">
+                <a th:href="@{/registro/instructor}" class="btn btn-success me-2">
+                    <i class="bi bi-person-badge"></i> Registrar Instructor
+                </a>
+                <a th:href="@{/registro/clases}" class="btn btn-warning">
+                    <i class="bi bi-calendar-plus"></i> Programar Clase
+                </a>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Acciones rápidas para gestión</h6>
+                        <div class="btn-group" role="group">
+                            <a th:href="@{/registro/instructor}" class="btn btn-outline-success">
+                                <i class="bi bi-person-plus"></i> Nuevo Instructor
+                            </a>
+                            <a th:href="@{/registro/clases}" class="btn btn-outline-warning">
+                                <i class="bi bi-calendar-plus"></i> Nueva Clase
+                            </a>
+                            <a th:href="@{/estudiantes}" class="btn btn-outline-primary">
+                                <i class="bi bi-people"></i> Ver Estudiantes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

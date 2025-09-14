@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
-
-    <!-- NAVBAR con dropdown para Misión/Visión/Objetivos/Valores -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm" th:fragment="navbar">
         <div class="container">
             <!-- Logo / Brand -->
@@ -29,34 +28,58 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                    <!-- Dropdown: Nosotros (Misión, Visión, Objetivos, Valores) -->
+                    <!-- Dropdown: Corporativo (Misión, Visión, Valores, Servicios) -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="nosotrosDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="corporativoDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                            Nosotros
+                            Corporativo
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="nosotrosDropdown">
+                        <ul class="dropdown-menu" aria-labelledby="corporativoDropdown">
                             <li><a class="dropdown-item" th:href="@{/mision}">Misión</a></li>
                             <li><a class="dropdown-item" th:href="@{/vision}">Visión</a></li>
-                            <li><a class="dropdown-item" th:href="@{/objetivos}">Objetivos</a></li>
                             <li><a class="dropdown-item" th:href="@{/valores}">Valores</a></li>
+                            <li><a class="dropdown-item" th:href="@{/servicios}">Servicios</a></li>
                         </ul>
                     </li>
 
-                    <!--  Enlaces normales -->
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/servicios}">Servicios</a>
-                    </li>
+                    <!-- Eventos -->
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/eventos}">Eventos</a>
                     </li>
+
+                    <!-- Dropdown: Registro -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="registroDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                            Registro
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="registroDropdown">
+                            <li><a class="dropdown-item" th:href="@{/registro/estudiante}">Inscripción de Estudiantes</a></li>
+                            <li><a class="dropdown-item" th:href="@{/registro/instructor}">Inscripción de Instructor</a></li>
+                            <li><a class="dropdown-item" th:href="@{/registro/clases}">Clases</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Estudiantes -->
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/contacto}">Contacto</a>
+                        <a class="nav-link" th:href="@{/estudiantes}">Listar Estudiantes</a>
+                    </li>
+
+                    <!-- Dropdown: Calendario/Horarios -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="calendarioDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                            Calendario
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="calendarioDropdown">
+                            <li><a class="dropdown-item" th:href="@{/horarios/estudiantes}">Horarios Estudiantes</a></li>
+                            <li><a class="dropdown-item" th:href="@{/horarios/instructores}">Horarios Instructores</a></li>
+                        </ul>
                     </li>
 
                 </ul>
 
-                <!-- Buscador (opcional) -->
+                <!-- Buscador (mantenido) -->
                 <form class="d-flex ms-lg-3" th:action="@{/buscar}" method="get">
                     <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="Buscar..." aria-label="Buscar">
                     <button class="btn btn-outline-secondary btn-sm" type="submit">Buscar</button>
@@ -64,8 +87,7 @@
             </div>
         </div>
     </nav>
-
-    <!-- ✅ CAROUSEL AUTOMÁTICO CON 4 IMÁGENES -->
+    <!-- Carrusel de imágenes -->
     <div id="carouselRollerSpeed" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselRollerSpeed" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
