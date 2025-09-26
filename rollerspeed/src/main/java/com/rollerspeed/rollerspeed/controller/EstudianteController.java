@@ -18,10 +18,11 @@ import java.util.Optional;
 
 @Tag(name = "Estudiantes", description = "Gestión de estudiantes en la academia Rollerspeed")
 @RestController
-@RequestMapping("/api/estudiantes")
+//@RequestMapping("/api/estudiantes")
+@RequestMapping(method = RequestMethod.GET, path = "/api/estudiantes")
 public class EstudianteController {
 
-    @Autowired
+    //@Autowired
     private EstudianteService estudianteService;
 
     @Operation(summary = "Listar todos los estudiantes", 

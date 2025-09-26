@@ -19,7 +19,12 @@ public class SecurityConfig {
                 .requestMatchers("/", "/mision", "/vision", "/servicios", "/valores",
                                  "/objetivos", "/contacto", "/Eventos", 
                                  "/horarios/**", "/estudiantes/**", "/registro/**", 
-                                 "/css/**", "/js/**", "/images/**").permitAll()
+                                 "/css/**", "/js/**", "/images/**",
+                                 // 👇 Añade estas rutas para Swagger y OpenAPI
+                                 "/v3/api-docs",
+                                 "/v3/api-docs/**",
+                                 "/swagger-ui.html",
+                                 "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -28,16 +33,15 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")           // URL para cerrar sesión (POST)
-                .logoutSuccessUrl("/")          // Redirige a la página principal
-                .invalidateHttpSession(true)    // Invalida la sesión
-                .deleteCookies("JSESSIONID")    // Elimina la cookie de sesión
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
             );
 
         return http.build();
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
