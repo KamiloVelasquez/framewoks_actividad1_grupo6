@@ -3,6 +3,7 @@ package com.rollerspeed.rollerspeed.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,41 +19,43 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     // ============================================================
-    // CONFIGURACIÓN 1: API REST 
-    // Para este escenario usaremos HTTP Basic Authentication
+    // CONFIGURACIÓN 1: API REST (HTTP Basic)
     // ============================================================
     @Bean
-    @Order(1)
+    @Order(1) // Se evalúa PRIMERO
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/api/**") // Solo aplica para las rutas /api/** con esto permite que otras rutas no sean afectadas
+            .securityMatcher("/api/**") // SOLO rutas /api/**
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().authenticated()
             )
-            .httpBasic(httpBasic -> {}) // Habilita HTTP Basic
+            .httpBasic(Customizer.withDefaults()) // HTTP Basic habilitado
             .sessionManagement(session -> 
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesiones
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .csrf(csrf -> csrf.disable()); // Desactiva CSRF para API
+            .csrf(csrf -> csrf.disable()); // Sin CSRF para APIs
 
         return http.build();
     }
 
     // ============================================================
-    // CONFIGURACIÓN 2: Aplicación Web
-    // Aqui dejamos las rutas públicas y privadas de la app web
+    // CONFIGURACIÓN 2: Aplicación Web (Form Login)
     // ============================================================
     @Bean
-    @Order(2)
+    @Order(2) // Se evalúa DESPUÉS
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+            .securityMatcher("/**") // TODO lo que NO sea /api/**
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/mision", "/vision", "/servicios", "/valores",
-                                 "/objetivos", "/contacto", "/Eventos", 
-                                 "/horarios/**", "/estudiantes/**", "/registro/**", 
-                                 "/css/**", "/js/**", "/images/**",
-                                 "/v3/api-docs", "/v3/api-docs/**",
-                                 "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                .requestMatchers(
+                    "/", "/mision", "/vision", "/servicios", "/valores",
+                    "/objetivos", "/contacto", "/Eventos", 
+                    "/horarios/**", "/estudiantes/**", "/registro/**", 
+                    "/css/**", "/js/**", "/images/**",
+                    "/v3/api-docs", "/v3/api-docs/**",
+                    "/swagger-ui.html", "/swagger-ui/**",
+                    "/login", "/logout"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -72,18 +75,18 @@ public class SecurityConfig {
     }
 
     // ============================================================
-    // USUARIO APIS EN MEMORIA
+    // Usuarios en memoria para HTTP Basic
     // ============================================================
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails apiUser = User.builder()
-            .username("api_user") // Usuario para la API
-            .password(passwordEncoder().encode("api123")) // Contraseña
-            .roles("API") // Rol
+            .username("api_user")
+            .password(passwordEncoder().encode("api123"))
+            .roles("API")
             .build();
 
         UserDetails admin = User.builder()
-            .username("admin") // Usuario admin
+            .username("admin")
             .password(passwordEncoder().encode("admin123"))
             .roles("ADMIN", "API")
             .build();
