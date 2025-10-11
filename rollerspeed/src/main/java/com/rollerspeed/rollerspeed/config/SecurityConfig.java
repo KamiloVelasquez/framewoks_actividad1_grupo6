@@ -1,39 +1,49 @@
 package com.rollerspeed.rollerspeed.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final UserDetailsService apiUserDetailsService;
+    private final UserDetailsService webUserDetailsService;
+
+    public SecurityConfig(
+            @Qualifier("apiUserDetailsService") UserDetailsService apiUserDetailsService,
+            @Qualifier("webUserDetailsService") UserDetailsService webUserDetailsService) {
+        this.apiUserDetailsService = apiUserDetailsService;
+        this.webUserDetailsService = webUserDetailsService;
+    }
+
     // ============================================================
     // CONFIGURACIÓN 1: API REST (HTTP Basic)
     // ============================================================
     @Bean
-    @Order(1) // Se evalúa PRIMERO
+    @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/api/**") // SOLO rutas /api/**
+            .securityMatcher("/api/**")
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().authenticated()
             )
-            .httpBasic(Customizer.withDefaults()) // HTTP Basic habilitado
+            .httpBasic(Customizer.withDefaults())
             .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .csrf(csrf -> csrf.disable()); // Sin CSRF para APIs
+            .authenticationProvider(apiAuthenticationProvider())
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
@@ -42,10 +52,10 @@ public class SecurityConfig {
     // CONFIGURACIÓN 2: Aplicación Web (Form Login)
     // ============================================================
     @Bean
-    @Order(2) // Se evalúa DESPUÉS
+    @Order(2)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/**") // TODO lo que NO sea /api/**
+            .securityMatcher("/**")
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", "/mision", "/vision", "/servicios", "/valores",
@@ -69,29 +79,29 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-            );
+            )
+            .authenticationProvider(webAuthenticationProvider());
 
         return http.build();
     }
 
     // ============================================================
-    // Usuarios en memoria para HTTP Basic
+    // Authentication Providers
     // ============================================================
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails apiUser = User.builder()
-            .username("api_user")
-            .password(passwordEncoder().encode("api123"))
-            .roles("API")
-            .build();
+    public DaoAuthenticationProvider apiAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(apiUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-        UserDetails admin = User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("admin123"))
-            .roles("ADMIN", "API")
-            .build();
-
-        return new InMemoryUserDetailsManager(apiUser, admin);
+    @Bean
+    public DaoAuthenticationProvider webAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(webUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 
     @Bean
