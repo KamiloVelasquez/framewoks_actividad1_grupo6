@@ -18,11 +18,10 @@ import java.util.Optional;
 
 @Tag(name = "Estudiantes", description = "Gestión de estudiantes en la academia Rollerspeed")
 @RestController
-//@RequestMapping("/api/estudiantes")
-@RequestMapping(method = RequestMethod.GET, path = "/api/estudiantes")
+@RequestMapping("/api/estudiantes")
 public class EstudianteController {
 
-    //@Autowired
+    @Autowired
     private EstudianteService estudianteService;
 
     @Operation(summary = "Listar todos los estudiantes", 
@@ -84,7 +83,6 @@ public class EstudianteController {
             @Parameter(description = "ID del estudiante a actualizar", required = true)
             @PathVariable Long id,
             @RequestBody Estudiante estudiante) {
-        // Aquí puedes validar que el ID coincida con el del objeto
         estudiante.setId(id);
         Estudiante actualizado = estudianteService.actualizarEstudiante(estudiante);
         if (actualizado == null) {
